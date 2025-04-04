@@ -1,0 +1,26 @@
+﻿@model int
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h1 class="display-4">Addition</h1>
+
+<form asp-action="Sum">
+    <div class="form-group">
+        <label class="control-label">Enter First Number</label>
+        <input name="number1" class="form-control" value="@ViewBag.FirstNumber" />
+    </div>    
+    <div class="form-group">
+        <label class="control-label">Enter Second Number</label>
+        <input name="number2" class="form-control" value="@ViewBag.SecondNumber" />
+    </div>
+    <p class="mt-2"><strong>
+        The sum of this two numbers are @Model
+    </strong></p>
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary" value="Sum" />
+    </div>
+</form>
