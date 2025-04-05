@@ -1,22 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVC_2_Repository.Context;
+using MVC_2_Repository.Interfaces;
 using MVC_2_Repository.Models;
 
 namespace MVC_2_Repository.Controllers
 {
     public class UnitController : Controller
     {
-        private readonly InventoryDbContext context;
+        private readonly IUnitRepository unitRepository;
 
-        public UnitController(InventoryDbContext _context)
+        public UnitController(IUnitRepository _unitRepository)
         {
-            context = _context;
+            unitRepository = _unitRepository;
         }
 
         public IActionResult Index()
         {
-            List<Unit> units = context.Units.ToList();
+            List<Unit> units = unitRepository.GetUnits();
             return View(units);
         }
 
@@ -31,8 +32,7 @@ namespace MVC_2_Repository.Controllers
         {
             try
             {
-                context.Units.Add(unit);
-                context.SaveChanges();
+                unitRepository.AddUnit(unit);
             }
             catch (Exception)
             {
@@ -45,13 +45,13 @@ namespace MVC_2_Repository.Controllers
 
         public IActionResult Details(int id)
         {
-            Unit unit = GetUnit(id);
+            Unit unit = unitRepository.GetUnit(id);
             return View(unit);
         }
 
         public IActionResult Edit(int id)
         {
-            Unit unit = GetUnit(id);
+            Unit unit = unitRepository.GetUnit(id);
             return View(unit);
         }
 
@@ -60,9 +60,7 @@ namespace MVC_2_Repository.Controllers
         {
             try
             {
-                context.Units.Attach(unit);
-                context.Entry(unit).State = EntityState.Modified;
-                context.SaveChanges();
+                unitRepository.UpdateUnit(unit);
             }
             catch (Exception)
             {
@@ -75,7 +73,7 @@ namespace MVC_2_Repository.Controllers
 
         public IActionResult Delete(int id)
         {
-            Unit unit = GetUnit(id);
+            Unit unit = unitRepository.GetUnit(id);
             return View(unit);
         }
 
@@ -84,9 +82,7 @@ namespace MVC_2_Repository.Controllers
         {
             try
             {
-                context.Units.Attach(unit); // unit veritabanından yüklenmeden, doğrudan ID üzerinden silinir. amaç: veritabanından yüklenmemiş bir nesnenin, EF tarafından izlenmesini sağlamak.
-                context.Entry(unit).State = EntityState.Deleted;
-                context.SaveChanges();
+                unitRepository.DeleteUnit(unit.Id);
             }
             catch (Exception)
             {
@@ -95,13 +91,6 @@ namespace MVC_2_Repository.Controllers
             }
 
             return RedirectToAction(nameof(Index));
-        }
-
-        private Unit GetUnit(int id)
-        {
-            Unit unit = context.Units.Where(x => x.Id == id).FirstOrDefault();
-
-            return unit;
         }
     }
 }
