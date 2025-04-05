@@ -4,7 +4,7 @@ namespace MVC_2_Repository.Interfaces
 {
     public interface IUnitRepository
     {
-        List<Unit> GetUnits();
+        List<Unit> GetUnits(string sortProperty, SortOrder sortOrder);
         Unit GetUnit(int id);
         void AddUnit(Unit unit);
         void UpdateUnit(Unit unit);

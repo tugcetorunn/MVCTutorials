@@ -12,9 +12,26 @@ namespace MVC_2_Repository.Repositories
         {
             context = _context;
         }
-        public List<Unit> GetUnits()
+        public List<Unit> GetUnits(string sortProperty, SortOrder sortOrder)
         {
-            return context.Units.ToList();
+            List<Unit> units = context.Units.ToList();
+
+            if (sortProperty.ToLower() == "name")
+            {
+                if (sortOrder == SortOrder.Ascending)
+                    units = units.OrderBy(x => x.Name).ToList();
+                else
+                    units = units.OrderByDescending(x => x.Name).ToList();
+            }
+            else
+            {
+                if (sortOrder == SortOrder.Ascending)
+                    units = units.OrderBy(x => x.Description).ToList();
+                else
+                    units = units.OrderByDescending(x => x.Description).ToList();
+            }
+
+            return units;
         }
         public Unit GetUnit(int id)
         {

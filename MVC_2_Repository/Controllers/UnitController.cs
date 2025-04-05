@@ -15,9 +15,45 @@ namespace MVC_2_Repository.Controllers
             unitRepository = _unitRepository;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string sortExpression = "")
         {
-            List<Unit> units = unitRepository.GetUnits();
+            ViewData["SortParamName"] = "name";
+            ViewData["SortParamDesc"] = "description";
+
+            ViewData["SortIconName"] = "";
+            ViewData["SortIconDesc"] = "";
+
+            SortOrder sortOrder;
+            string sortProperty;
+
+            switch (sortExpression.ToLower())
+            {
+                case "name_desc":
+                    sortOrder = SortOrder.Descending;
+                    sortProperty = "name";
+                    ViewData["SortParamName"] = "name";
+                    ViewData["SortIconName"] = "fa fa-arrow-up";
+                    break;
+                case "description":
+                    sortOrder = SortOrder.Ascending;
+                    sortProperty = "description";
+                    ViewData["SortParamDesc"] = "description_desc";
+                    ViewData["SortIconDesc"] = "fa fa-arrow-down";
+                    break;
+                case "description_desc":
+                    sortOrder = SortOrder.Descending;
+                    sortProperty = "description";
+                    ViewData["SortParamDesc"] = "description";
+                    ViewData["SortIconDesc"] = "fa fa-arrow-up";
+                    break;
+                default:
+                    sortOrder = SortOrder.Ascending;
+                    sortProperty = "name";
+                    ViewData["SortParamName"] = "name_desc";
+                    ViewData["SortIconName"] = "fa fa-arrow-down";
+                    break;
+            }
+            List<Unit> units = unitRepository.GetUnits(sortProperty, sortOrder);
             return View(units);
         }
 
