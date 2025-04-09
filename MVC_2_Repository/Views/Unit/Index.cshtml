@@ -2,8 +2,8 @@
 
 @{
     ViewData["Title"] = "Index";
-    Console.WriteLine(@ViewData["SortIconName"]);
-    Console.WriteLine(@ViewData["SortIconDesc"]);
+
+    SortModel sortModel = (SortModel)ViewData["sortModel"];
 }
 
 <h1>Index</h1>
@@ -15,14 +15,14 @@
     <thead>
         <tr>
             <th>
-                <i class="@ViewData["SortIconName"]" arial-hidden="true"></i>
-                <a asp-action="Index" asp-route-sortExpression="@ViewData["SortParamName"]">
+                <i class="@sortModel.GetColumn("name").SortIcon" arial-hidden="true"></i>
+                <a asp-action="Index" asp-route-sortExpression="@sortModel.GetColumn("name").SortExpression">
                     @Html.DisplayNameFor(model => model.Name)
                 </a>
             </th>
             <th>
-                <i class="@ViewData["SortIconDesc"]" arial-hidden="true"></i>
-                <a asp-action="Index" asp-route-sortExpression="@ViewData["SortParamDesc"]">
+                <i class="@sortModel.GetColumn("description").SortIcon" arial-hidden="true"></i>
+                <a asp-action="Index" asp-route-sortExpression="@sortModel.GetColumn("description").SortExpression">
                     @Html.DisplayNameFor(model => model.Description)
                 </a>
             </th>

@@ -17,43 +17,18 @@ namespace MVC_2_Repository.Controllers
 
         public IActionResult Index(string sortExpression = "")
         {
-            ViewData["SortParamName"] = "name";
-            ViewData["SortParamDesc"] = "description";
+            //SortModel sortModel = ApplySort(sortExpression);
 
-            ViewData["SortIconName"] = "";
-            ViewData["SortIconDesc"] = "";
+            SortModel sortModel = new();
 
-            SortOrder sortOrder;
-            string sortProperty;
+            sortModel.AddColumn("name");
+            sortModel.AddColumn("description");
+            sortModel.ApplySort(sortExpression);
 
-            switch (sortExpression.ToLower())
-            {
-                case "name_desc":
-                    sortOrder = SortOrder.Descending;
-                    sortProperty = "name";
-                    ViewData["SortParamName"] = "name";
-                    ViewData["SortIconName"] = "fa fa-arrow-up";
-                    break;
-                case "description":
-                    sortOrder = SortOrder.Ascending;
-                    sortProperty = "description";
-                    ViewData["SortParamDesc"] = "description_desc";
-                    ViewData["SortIconDesc"] = "fa fa-arrow-down";
-                    break;
-                case "description_desc":
-                    sortOrder = SortOrder.Descending;
-                    sortProperty = "description";
-                    ViewData["SortParamDesc"] = "description";
-                    ViewData["SortIconDesc"] = "fa fa-arrow-up";
-                    break;
-                default:
-                    sortOrder = SortOrder.Ascending;
-                    sortProperty = "name";
-                    ViewData["SortParamName"] = "name_desc";
-                    ViewData["SortIconName"] = "fa fa-arrow-down";
-                    break;
-            }
-            List<Unit> units = unitRepository.GetUnits(sortProperty, sortOrder);
+            ViewData["sortModel"] = sortModel;
+
+            List<Unit> units = unitRepository.GetUnits(sortModel);
+
             return View(units);
         }
 
